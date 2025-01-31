@@ -35,8 +35,11 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
+      'react-prop-types': 'off',
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
 ]
