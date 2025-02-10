@@ -1,42 +1,108 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { createContext, useContext, useState } from "react";
+import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { auth } from "../firebase/config";
 
 const AuthContext = createContext();
 
-// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const toast = useToast();
+  const navigate = useNavigate();
 
-  const login = ({ email, password }) => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
-    };
-    
+    return () => unsubscribe();
+  }, []);
+
+  const login = async ({ email, password }) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setUser(userCredential.user);
+      toast({
+        title: "Inicio de sesión exitoso",
+        status: "success",
+        isClosable: true,
+        duration: 3000,
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error.code, error.message);
+      toast({
+        title: "Error al iniciar sesión",
+        description: error.message,
+        status: "error",
+        isClosable: true,
+        duration: 3000,
+      });
+    }
+  };
 
   const registerUser = async ({ email, password }) => {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    return user
-  }catch(error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorCode, errorMessage)
-  }
-  }
-  return (<AuthContext.Provider value={{ user, registerUser, login }}>{children}</AuthContext.Provider>);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setUser(userCredential.user);
+      toast({
+        title: "Usuario registrado",
+        status: "success",
+        isClosable: true,
+        duration: 3000,
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error.code, error.message);
+      toast({
+        title: "Error al registrarse",
+        description: error.message,
+        status: "error",
+        isClosable: true,
+        duration: 3000,
+      });
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      toast({
+        title: "Sesión cerrada correctamente",
+        status: "info",
+        isClosable: true,
+        duration: 3000,
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, registerUser, logout, login }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);
