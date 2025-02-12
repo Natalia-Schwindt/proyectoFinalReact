@@ -3,7 +3,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { Box, Button, Image, SimpleGrid, Text, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import Headers from "../components/Header";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -27,9 +26,7 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <Headers />
-      <Flex justify="center" p={5}>
+      <Flex justify="center" p={16}>
       <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4} maxW="900px">
         {productos.map((producto) => (
           <Box
@@ -69,7 +66,6 @@ const Home = () => {
         ))}
       </SimpleGrid>
       </Flex>
-    </>
   );
 };
 

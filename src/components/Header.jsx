@@ -1,7 +1,7 @@
 import { Button, Heading, HStack, Link, SimpleGrid } from '@chakra-ui/react'
 import React from 'react'
 // import React from 'react'
-import { Link as RouterLink,NavLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 
 import { useAuth } from '../context/AuthContext'
 
@@ -9,7 +9,7 @@ const Header = () => {
     const { user, logout } = useAuth()
 
   return (
-    <SimpleGrid p={4} bg="gray.100">
+    <SimpleGrid p={4} bg="gray.200">
         <Heading size="lg" textAlign="center">
           Productos para gatos
           </Heading>
