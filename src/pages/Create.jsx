@@ -9,6 +9,7 @@ import {
   Input,
   Stack,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -88,8 +89,11 @@ const Create = () => {
 
     setLoading(true);
     try {
-        const productData = { ...values, uid: user?.uid || "SIN_UID" };
-      await createProduct({ productData });
+      const product = { ...values, uid: user?.uid || "SIN_UID" };
+    
+    console.log("Datos a enviar:", product);
+
+    await createProduct(product);
 
       toast({
         title: "Producto creado",
