@@ -15,6 +15,8 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { createProduct } from "../services/products";
 
+const ADMIN_EMAIL = "naty10@gmail.com";
+
 const Create = () => {
   const [values, setValues] = useState({
     name: "",
@@ -28,6 +30,16 @@ const Create = () => {
   const [error, setError] = useState(false);
   const { user } = useAuth();
   const toast = useToast();
+
+  if (!user || user.email !== ADMIN_EMAIL) {
+    return (
+      <Box textAlign="center" mt="8">
+        <Text fontSize="xl" color="red.500">
+          No tienes permiso para acceder a esta página.
+        </Text>
+      </Box>
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -51,11 +63,7 @@ const Create = () => {
     e.preventDefault();
     setError({});
 
-    console.log("URL ingresada:", values.image_url);
-    const urlValida = isValidUrl(values.image_url);
-    console.log("¿Es válida?", urlValida);
-
-    if (values.image_url && !urlValida) {
+    if (values.image_url && !isValidUrl(values.image_url)) {
       toast({
         title: "URL inválida",
         description: "Por favor ingresa una URL válida para la imagen",
@@ -64,19 +72,6 @@ const Create = () => {
         isClosable: true,
       });
       return;
-    }
-
-    console.log("Usuario en contexto:", user); 
-
-    if (!user || !user.uid) {
-        toast({
-            title: "Usuario no autenticado",
-            description: "Por favor inicia sesión",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-        });
-        return;
     }
 
     let errors = {};
@@ -93,10 +88,9 @@ const Create = () => {
 
     setLoading(true);
     try {
-        const productData = { ...values, uid: user?.uid || "SIN_UID" }; 
-    console.log("Datos a enviar:", productData);
-
+        const productData = { ...values, uid: user?.uid || "SIN_UID" };
       await createProduct({ productData });
+
       toast({
         title: "Producto creado",
         status: "success",
@@ -113,7 +107,6 @@ const Create = () => {
       });
       setError({});
     } catch (error) {
-        console.error("Error en createProduct:", error);
       toast({
         title: "Error al crear producto",
         description: error.message,
