@@ -1,23 +1,34 @@
-import { Button, Heading, HStack, Link, SimpleGrid } from '@chakra-ui/react'
-import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import {
+  Button,
+  Heading,
+  HStack,
+  Link,
+  SimpleGrid,
+  Image,
+  Flex,
+} from "@chakra-ui/react";
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-    const { user, isAdmin, logout } = useAuth()
+  const { user, isAdmin, logout } = useAuth();
 
   return (
     <SimpleGrid p={4} bg="gray.200">
-        <Heading size="lg" textAlign="center">
-          Productos para gatos
-          </Heading>
+      <Flex align="center" justify="center" mb={2}>
+        <Image src="/logo.png" alt="Logo" boxSize="50px" mr={3} />
+        <Heading size="lg">Productos para gatos</Heading>
+      </Flex>
 
       <HStack spacing={4} justify="center">
         <Link as={RouterLink} to="/">
-        Home
+          Home
         </Link>
-        <Link as={RouterLink} to="/products">Productos</Link>
+        <Link as={RouterLink} to="/products">
+          Productos
+        </Link>
 
         {!user ? (
           <>
@@ -32,8 +43,8 @@ const Header = () => {
           <>
             {isAdmin && (
               <Link as={RouterLink} to="create">
-              Crear producto
-            </Link>
+                Crear producto
+              </Link>
             )}
             <Button colorScheme="red" onClick={logout}>
               Cerrar sesión
@@ -45,4 +56,4 @@ const Header = () => {
   );
 };
 
-export default Header
+export default Header;

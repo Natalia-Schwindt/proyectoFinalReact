@@ -12,8 +12,12 @@ const Products = () => {
       try {
         const q = query(collection(db, "productos"), orderBy("name", "asc"));
         const querySnapshot = await getDocs(q);
+
+        console.log("Cantidad de productos encontrados:", querySnapshot.docs.length);
+
         const productsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+        console.log("Productos obtenidos:", productsList);
         setProducts(productsList);
       } catch (error) {
         console.error("Error al obtener productos:", error);
