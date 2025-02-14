@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import ProductDetail from "../pages/ProductDetail";
 import ProtectedRoute from "./ProtectedRoute";
 import Products from "../components/Products";
+import NotFound from "../pages/NotFound";
 
 const Routing = () => {
   return (
@@ -18,6 +19,7 @@ const Routing = () => {
       <Route path="/logout" element={<Home />} />
       <Route path="/products" element={<Products />} />
       <Route path="/producto/:id" element={<ProductDetail />} />
+      <Route path="*" element={<NotFound />} />
 
       <Route element={<ProtectedRoute adminOnly={true} />}>
         <Route path="/create" element={<Create />} />
