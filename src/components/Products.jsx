@@ -1,63 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { SimpleGrid, Box, Heading, Text, Button, Image, Spinner, Center } from '@chakra-ui/react';
-import { db } from '../firebase/config';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { Box, Button, Image, SimpleGrid, Text, Flex, Heading, Center, Spinner } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const obtenerProductos = async () => {
       try {
         const q = query(collection(db, "productos"), orderBy("name", "asc"));
         const querySnapshot = await getDocs(q);
+        const productosLista = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-        console.log("Cantidad de productos encontrados:", querySnapshot.docs.length);
-
-        const productsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        console.log("Productos obtenidos:", productsList);
-        setProducts(productsList);
+        setProductos(productosLista);
       } catch (error) {
-        console.error("Error al obtener productos:", error);
+        console.error("Error obteniendo productos:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    obtenerProductos();
   }, []);
 
   if (loading) return <Center mt={8}><Spinner size="xl" /></Center>;
 
-  if (products.length === 0) return <Text textAlign="center">No hay productos disponibles.</Text>;
-
   return (
-    <Box p={4} maxW="1200px" mx="auto">
+    <Flex direction="column" align="center" p={16}>
       <Heading size="lg" mb={6} textAlign="center">Productos</Heading>
-
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
-        {products.map((product) => (
-          <Box key={product.id} borderWidth={1} borderRadius="lg" p={4} boxShadow="md" bg="white">
-            <Image 
-              src={product.image_url} 
-              alt={product.name} 
-              objectFit="cover" 
-              w="100%" 
-              h="200px" 
-              borderRadius="md" 
-            />
-            <Heading size="md" mt={3} textAlign="center">{product.name}</Heading>
-            <Text mt={2} fontSize="sm" color="gray.600">Descripción: {product.description}</Text>
-            <Text mt={2} fontSize="lg" fontWeight="bold">Precio: ${product.price}</Text>
-            <Button mt={4} colorScheme="teal" w="100%" as="a" href={`/product/${product.id}`}>
-              Ver detalles
-            </Button>
-          </Box>
-        ))}
-      </SimpleGrid>
-    </Box>
+      
+      {productos.length === 0 ? (
+        <Text textAlign="center">No hay productos disponibles.</Text>
+      ) : (
+        <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4} maxW="900px">
+          {productos.map((producto) => (
+            <Box
+              key={producto.id}
+              borderWidth="1px"
+              borderRadius="lg"
+              p={2}
+              textAlign="center"
+              boxShadow="sm"
+              transition="all 0.3s"
+              _hover={{ transform: "scale(1.05)", boxShadow: "md" }}
+              maxW="220px"
+              mx="auto"
+            >
+              <Image
+                src={producto.image_url}
+                alt={producto.name}
+                boxSize="200px"
+                objectFit="cover"
+                mx="auto"
+              />
+              <Text fontWeight="bold" fontSize="m" mt={2}>
+                {producto.name}
+              </Text>
+              <Text fontSize="s" color="gray.600">
+                ${producto.price}
+              </Text>
+              <Button
+                colorScheme="teal"
+                size="sm"
+                mt={2}
+                onClick={() => navigate(`/producto/${producto.id}`)}
+              >
+                Ver más
+              </Button>
+            </Box>
+          ))}
+        </SimpleGrid>
+      )}
+    </Flex>
   );
 };
 
