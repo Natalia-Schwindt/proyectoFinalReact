@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { Box, Button, Image, SimpleGrid, Text, Flex, Heading, Center, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  SimpleGrid,
+  Text,
+  Flex,
+  Heading,
+  Center,
+  Spinner,
+  Input,
+  Select,
+  Checkbox,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [priceRange, setPriceRange] = useState("all");
+  const [showFavorites, setShowFavorites] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +30,10 @@ const Products = () => {
       try {
         const q = query(collection(db, "productos"), orderBy("name", "asc"));
         const querySnapshot = await getDocs(q);
-        const productosLista = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const productosLista = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         setProductos(productosLista);
       } catch (error) {
@@ -27,17 +46,61 @@ const Products = () => {
     obtenerProductos();
   }, []);
 
-  if (loading) return <Center mt={8}><Spinner size="xl" /></Center>;
+  const productosFiltrados = productos.filter((producto) => {
+    const coincideNombre = producto.name.toLowerCase().includes(search.toLowerCase());
+    const coincidePrecio = priceRange ==="all" ||
+    (priceRange === "low" && producto.price < 50) ||
+    (priceRange === "mid" && producto.price >= 50 && producto.price <= 100) ||
+    (priceRange === "high" && producto.price > 100);
+    const coincideFavorito = !showFavorites || producto.is_favorite;
+
+    return coincideNombre && coincidePrecio && coincideFavorito;
+  });
+
+  if (loading)
+    return (
+      <Center mt={8}>
+        <Spinner size="xl" />
+      </Center>
+    );
 
   return (
     <Flex direction="column" align="center" p={16}>
-      <Heading size="lg" mb={6} textAlign="center">Productos</Heading>
-      
-      {productos.length === 0 ? (
-        <Text textAlign="center">No hay productos disponibles.</Text>
+      <Heading size="lg" mb={6} textAlign="center">
+        Productos
+      </Heading>
+
+      <Flex direction={{ base: "column", md: "row" }} 
+        gap={4}
+        mb={6}
+        w="100%"
+        maxW="500px"
+        justify="center"
+        align="center">
+
+        <Input
+          placeholder="Buscar por nombre..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+<Select value={priceRange} onChange={(e) => setPriceRange(e.target.value)}>
+          <option value="all">Todos los precios</option>
+          <option value="low">Menos de $50</option>
+          <option value="mid">$50 - $100</option>
+          <option value="high">Más de $100</option>
+        </Select>
+
+        <Checkbox isChecked={showFavorites} onChange={(e) => setShowFavorites(e.target.checked)}>
+         Favoritos
+        </Checkbox>
+      </Flex>
+
+      {productosFiltrados.length === 0 ? (
+        <Text textAlign="center">No hay productos que coincidan con los filtros.</Text>
       ) : (
-        <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4} maxW="900px">
-          {productos.map((producto) => (
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} maxW="900px">
+          {productosFiltrados.map((producto) => (
             <Box
               key={producto.id}
               borderWidth="1px"
