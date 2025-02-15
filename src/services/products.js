@@ -1,4 +1,4 @@
-import { addDoc, collection, getDoc, doc } from "firebase/firestore";
+import { addDoc, collection, doc,getDoc } from "firebase/firestore";
 
 import { db } from "../firebase/config";
 

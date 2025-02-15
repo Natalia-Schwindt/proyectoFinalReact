@@ -60,9 +60,6 @@ export const Login = () => {
         <Button mt={4} colorScheme="teal" type="submit" width="100%">
           Iniciar sesión
         </Button>
-        {/* <Button onClick={handleGoogleSignIn} mt={4} colorScheme="teal" type="button" width="100%">
-            Iniciar sesión con Google
-          </Button> */}
       </form>
     </Box>
   );

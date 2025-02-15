@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import React, { createContext, useContext, useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { auth } from "../firebase/config";
 
 const AuthContext = createContext();

@@ -1,6 +1,7 @@
+import { Button, Flex, Heading, Image,Text } from "@chakra-ui/react";
 import React from 'react'
-import { Button, Flex, Heading, Text, Image } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+
 import gato404 from "../assets/gato404.png";
 
 const NotFound = () => {
