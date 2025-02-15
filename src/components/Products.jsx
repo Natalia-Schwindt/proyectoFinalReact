@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "../firebase/config";
 import {
   Box,
   Button,
-  Image,
-  SimpleGrid,
-  Text,
+  Center,
+  Checkbox,
   Flex,
   Heading,
-  Center,
-  Spinner,
+  Image,
   Input,
   Select,
-  Checkbox,
+  SimpleGrid,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
+import { collection, getDocs, orderBy,query } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { db } from "../firebase/config";
 
 const Products = () => {
   const [productos, setProductos] = useState([]);

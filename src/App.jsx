@@ -1,8 +1,8 @@
 import React from "react";
 
-import Routing from "./routes/Routing";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Routing from "./routes/Routing";
 
 function App() {
 

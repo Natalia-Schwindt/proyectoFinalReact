@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { Box, Button, Flex,Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/config";
-import { Box, Button, Image, SimpleGrid, Text, Flex } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { db } from "../firebase/config";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);

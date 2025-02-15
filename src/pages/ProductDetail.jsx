@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Image, Text, Button, Flex } from "@chakra-ui/react";
-import { db } from "../firebase/config";
+import { Button, Flex,Image, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useNavigate,useParams } from "react-router-dom";
+
+import { useCart } from "../context/CartContext";
+import { db } from "../firebase/config";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const obtenerProducto = async () => {
@@ -51,7 +54,7 @@ const ProductDetail = () => {
         <Button colorScheme="teal" mt={6} onClick={() => navigate(-1)}>
           Volver
         </Button>
-        <Button colorScheme="teal" mt={6}>
+        <Button colorScheme="teal" mt={6} onClick={() => addToCart(producto)}>
           Agregar al carrito
         </Button>
       </Flex>
