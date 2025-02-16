@@ -54,25 +54,30 @@ Ejecuta el proyecto:
 
 ## Vista previa del proyecto
 
-Inicio
+
 [![Home.png](https://i.postimg.cc/2SmV8SG1/Home.png)](https://postimg.cc/LnCHxRrS)
-
+Inicio
 -----------------------------------------
-Login
+
 [![Login.png](https://i.postimg.cc/x1RqkVpt/Login.png)](https://postimg.cc/RWWv8yBH)
-
+Login
 -----------------------------------------
-Register
+
 [![Register.png](https://i.postimg.cc/7Lt6VMkz/Register.png)](https://postimg.cc/qtn4BKgB)
-
+Register
 -----------------------------------------
-Products
+
 [![Products.png](https://i.postimg.cc/xCWdrfqT/Products.png)](https://postimg.cc/YGz7Yw1J)
-
+Products
 -----------------------------------------
-Cart
+
 [![Cart.png](https://i.postimg.cc/BbHn4r15/Cart.png)](https://postimg.cc/Wqpv7f8t)
-
+Cart
 -----------------------------------------
-Create Products
+
 [![Create-Product.png](https://i.postimg.cc/G3y2FySB/Create-Product.png)](https://postimg.cc/nMnpZCxZ)
+Create Products
+-----------------------------------------
+
+[![404.png](https://i.postimg.cc/XJKPWxYG/404.png)](https://postimg.cc/Q9tmkQ5h)
+404
