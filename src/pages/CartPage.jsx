@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Heading,
   HStack,
   Image,
@@ -18,11 +19,17 @@ const CartPage = () => {
 
   return (
     <Box p={5}>
-      <Heading size="xl" mb={4}>
+      <Heading size="xl" mb={4} textAlign="center">
         🛒 Carrito de Compras
       </Heading>
       {cart.length === 0 ? (
-        <Text fontSize="lg">Tu carrito está vacío.</Text>
+        <Center>
+          <VStack spacing={4} align="center">
+            <Text fontSize="lg" textAlign="center">
+              Tu carrito está vacío.
+            </Text>
+          </VStack>
+        </Center>
       ) : (
         <VStack spacing={4} align="stretch">
           {cart.map((item) => (
