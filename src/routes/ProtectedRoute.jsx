@@ -1,20 +1,20 @@
-import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from "../context/AuthContext";
 
-const ProtectedRoute = ({ adminOnly = false}) => {
-    const { user, isAdmin } = useAuth();
+const ProtectedRoute = ({ adminOnly = false }) => {
+  const { user, isAdmin } = useAuth();
 
-    if (!user) {
-        return <Navigate to="/login" replace />
-    }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    if (adminOnly && !isAdmin) {
-        return <Navigate to="/" replace />
-    }
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
-    return <Outlet />
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

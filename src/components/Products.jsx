@@ -12,14 +12,14 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { collection, getDocs, orderBy,query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { db } from "../firebase/config";
 
 const Products = () => {
-  const [productos, setProductos] = useState([]);
+  const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [priceRange, setPriceRange] = useState("all");
@@ -27,16 +27,16 @@ const Products = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const obtenerProductos = async () => {
+    const getProducts = async () => {
       try {
         const q = query(collection(db, "productos"), orderBy("name", "asc"));
         const querySnapshot = await getDocs(q);
-        const productosLista = querySnapshot.docs.map((doc) => ({
+        const productsList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        setProductos(productosLista);
+        setProductList(productsList);
       } catch (error) {
         console.error("Error obteniendo productos:", error);
       } finally {
@@ -44,18 +44,21 @@ const Products = () => {
       }
     };
 
-    obtenerProductos();
+    getProducts();
   }, []);
 
-  const productosFiltrados = productos.filter((producto) => {
-    const coincideNombre = producto.name.toLowerCase().includes(search.toLowerCase());
-    const coincidePrecio = priceRange ==="all" ||
-    (priceRange === "low" && producto.price < 50) ||
-    (priceRange === "mid" && producto.price >= 50 && producto.price <= 100) ||
-    (priceRange === "high" && producto.price > 100);
-    const coincideFavorito = !showFavorites || producto.is_favorite;
+  const filteredProducts = productList.filter((product) => {
+    const matchesName = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesPrice =
+      priceRange === "all" ||
+      (priceRange === "low" && product.price < 50) ||
+      (priceRange === "mid" && product.price >= 50 && product.price <= 100) ||
+      (priceRange === "high" && product.price > 100);
+    const matchesFavorite = !showFavorites || product.is_favorite;
 
-    return coincideNombre && coincidePrecio && coincideFavorito;
+    return matchesName && matchesPrice && matchesFavorite;
   });
 
   if (loading)
@@ -71,39 +74,48 @@ const Products = () => {
         Productos
       </Heading>
 
-      <Flex direction={{ base: "column", md: "row" }} 
+      <Flex
+        direction={{ base: "column", md: "row" }}
         gap={4}
         mb={6}
         w="100%"
         maxW="500px"
         justify="center"
-        align="center">
-
+        align="center"
+      >
         <Input
           placeholder="Buscar por nombre..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-<Select value={priceRange} onChange={(e) => setPriceRange(e.target.value)}>
+        <Select
+          value={priceRange}
+          onChange={(e) => setPriceRange(e.target.value)}
+        >
           <option value="all">Todos los precios</option>
           <option value="low">Menos de $50</option>
           <option value="mid">$50 - $100</option>
           <option value="high">Más de $100</option>
         </Select>
 
-        <Checkbox isChecked={showFavorites} onChange={(e) => setShowFavorites(e.target.checked)}>
-         Favoritos
+        <Checkbox
+          isChecked={showFavorites}
+          onChange={(e) => setShowFavorites(e.target.checked)}
+        >
+          Favoritos
         </Checkbox>
       </Flex>
 
-      {productosFiltrados.length === 0 ? (
-        <Text textAlign="center">No hay productos que coincidan con los filtros.</Text>
+      {filteredProducts.length === 0 ? (
+        <Text textAlign="center">
+          No hay productos que coincidan con los filtros.
+        </Text>
       ) : (
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} maxW="900px">
-          {productosFiltrados.map((producto) => (
+          {filteredProducts.map((product) => (
             <Box
-              key={producto.id}
+              key={product.id}
               borderWidth="1px"
               borderRadius="lg"
               p={2}
@@ -115,23 +127,23 @@ const Products = () => {
               mx="auto"
             >
               <Image
-                src={producto.image_url}
-                alt={producto.name}
+                src={product.image_url}
+                alt={product.name}
                 boxSize="200px"
                 objectFit="cover"
                 mx="auto"
               />
               <Text fontWeight="bold" fontSize="m" mt={2}>
-                {producto.name}
+                {product.name}
               </Text>
               <Text fontSize="s" color="gray.600">
-                ${producto.price}
+                ${product.price}
               </Text>
               <Button
                 colorScheme="teal"
                 size="sm"
                 mt={2}
-                onClick={() => navigate(`/producto/${producto.id}`)}
+                onClick={() => navigate(`/product/${product.id}`)}
               >
                 Ver más
               </Button>
