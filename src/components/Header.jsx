@@ -29,8 +29,12 @@ const Header = () => {
       </Flex>
 
       <HStack spacing={4} justify="center">
-        <Link as={RouterLink} to="/">Home</Link>
-        <Link as={RouterLink} to="/products">Productos</Link>
+        <Link as={RouterLink} to="/">
+          Inicio
+        </Link>
+        <Link as={RouterLink} to="/products">
+          Productos
+        </Link>
 
         {user && (
           <IconButton

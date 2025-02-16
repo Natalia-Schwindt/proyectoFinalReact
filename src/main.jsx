@@ -11,9 +11,9 @@ createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <ChakraProvider>
       <AuthProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
       </AuthProvider>
     </ChakraProvider>
   </BrowserRouter>

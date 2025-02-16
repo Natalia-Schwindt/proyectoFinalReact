@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect,useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useAuth } from "./AuthContext";
 
@@ -29,7 +29,8 @@ export const CartProvider = ({ children }) => {
 
     setCart((prevCart) => {
       const itemExists = prevCart.find(
-        (item) => item.id === product.id && item.name === product.name);
+        (item) => item.id === product.id && item.name === product.name
+      );
 
       if (itemExists) {
         return prevCart.map((item) =>
@@ -44,17 +45,19 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId, productName) => {
-    setCart((prevCart) => 
-      prevCart.map((item) => {
-        if (item.id === productId && item.name === productName) {
-          if (item.quantity > 1) {
-            return { ...item, quantity : item.quantity - 1 };
-          } else {
-            return null;
+    setCart((prevCart) =>
+      prevCart
+        .map((item) => {
+          if (item.id === productId && item.name === productName) {
+            if (item.quantity > 1) {
+              return { ...item, quantity: item.quantity - 1 };
+            } else {
+              return null;
+            }
           }
-        }
-        return item;
-      }).filter(Boolean)
+          return item;
+        })
+        .filter(Boolean)
     );
   };
 
@@ -64,7 +67,9 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );

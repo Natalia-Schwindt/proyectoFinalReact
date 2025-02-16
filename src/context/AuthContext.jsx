@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import React, { createContext, useContext, useEffect,useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../firebase/config";
@@ -29,7 +29,11 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async ({ email, password }) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       setUser(userCredential.user);
 
       toast({
@@ -54,7 +58,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async ({ email, password }) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       setUser(userCredential.user);
       setIsAdmin(userCredential.user.email === "naty10@gmail.com");
 
@@ -97,7 +105,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAdmin, login, logout, registerUser }}>
+    <AuthContext.Provider
+      value={{ user, isAdmin, login, logout, registerUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

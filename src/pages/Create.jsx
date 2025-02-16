@@ -77,23 +77,24 @@ const Create = () => {
 
     let errors = {};
     if (!values.name) errors.name = "El nombre es obligatorio";
-    if (!values.description) errors.description = "La descripción es obligatoria";
+    if (!values.description)
+      errors.description = "La descripción es obligatoria";
     if (!values.price || isNaN(values.price) || Number(values.price) <= 0) {
       errors.price = "El precio debe ser un número válido";
     }
 
     if (Object.keys(errors).length > 0) {
-        setError(errors);
-        return;
-      }
+      setError(errors);
+      return;
+    }
 
     setLoading(true);
     try {
       const product = { ...values, uid: user?.uid || "SIN_UID" };
-    
-    console.log("Datos a enviar:", product);
 
-    await createProduct(product);
+      console.log("Datos a enviar:", product);
+
+      await createProduct(product);
 
       toast({
         title: "Producto creado",
@@ -138,9 +139,7 @@ const Create = () => {
               onChange={handleChange}
               placeholder="Ingrese el nombre del producto"
             />
-            {error.name && (
-              <FormErrorMessage>{error.name}</FormErrorMessage>
-            )}
+            {error.name && <FormErrorMessage>{error.name}</FormErrorMessage>}
           </FormControl>
 
           <FormControl isInvalid={error.description}>
@@ -152,8 +151,8 @@ const Create = () => {
               placeholder="Ingrese la descripción del producto"
             />
             {error.description && (
-    <FormErrorMessage>{error.description}</FormErrorMessage>
-  )}
+              <FormErrorMessage>{error.description}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl>
@@ -175,9 +174,7 @@ const Create = () => {
               onChange={handleChange}
               placeholder="Ingrese el precio del producto"
             />
-            {error.price && (
-    <FormErrorMessage>{error.price}</FormErrorMessage>
-  )}
+            {error.price && <FormErrorMessage>{error.price}</FormErrorMessage>}
           </FormControl>
 
           <FormControl>
